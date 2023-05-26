@@ -1,0 +1,14 @@
+N-Soliton for CMDNLS
+    from : The Calogero-Moser Derivative Nonlinear Schrodinger Equation - Gerard and Lenzmann (pg 21+)
+    description : Given the pole ansatz with N poles in the lower half plane, we get an N soliton with solution
+            u(t,x) = Sum a_j(t)/(x - z_j(t))
+        where the poles z_j follow a complexified Caloger-Moser.
+    related : These forms of solitons were also seen for 
+        half-waves map equation (arXiv:2006.16826 - Berntson, Klabbers, Langmnann)
+        Benjamin-Ono (Meromorphic solutions of the Benjamin-Ono equation)
+        
+Intermediate Non-Linear Schrodinger
+    solitons : none (A spectral transform for the intermediate nonlinear Schrodinger equation - Pelinovsky)
+    dark solitons : yes (Nonlocal Models for Envelope Waves in a Stratified Fluid - Pelinovsky)
+
+
