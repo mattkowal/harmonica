@@ -2,5 +2,5 @@
 2) Linearize energy
 	- Compute Hessian
 	- Compute 0 eigenvalues (scaling, translation, Galilei symmetry?)
-3) Figure out signa & names in different versions of CMDNLS/INLS/etc
+3) Figure out signs & names in different versions of CMDNLS/INLS/etc
 4) Do more numerics, find parabolas, prove it??
