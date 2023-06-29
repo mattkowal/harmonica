@@ -1,6 +1,6 @@
  - Understand 2-solitons
  - Check explicit 2-soliton (6.19) and compute energy
- 	- show soliton resolution in L2 for this case
+	- show soliton resolution in L2 for this case
  - Understand action of Galilei, scaling on H_kappa
  - Compute energy of travelling solitary waves R_vw (these really should be called the solitons)
  - Are R_vw minimizers of E s.t. P = const (P = <|D|q, q> - 1/2 ||q||_4^4)
