@@ -1,0 +1,177 @@
+\documentclass{amsart}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+%\usepackage[notref,notcite]{showkeys}
+\usepackage{enumitem}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{conj}[theorem]{Conjecture}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{convention}[theorem]{Convention}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{xca}[theorem]{Exercise}
+%\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+
+\newcommand\R{\mathbb{R}}
+\newcommand\Z{\mathbb{Z}}
+\newcommand\T{\mathbb{T}}
+\newcommand\C{\mathbb{C}}
+\newcommand\N{\mathbb{N}}
+%\newcommand{\diff}{\mathrm{diff}}
+%\newcommand\area{\mathrm{Area}}
+\newcommand\dist{\mathrm{dist}}
+\newcommand\supp{\mathrm{supp}}
+%\newcommand\imag{\mathrm{Im}\,}
+%\newcommand\real{\mathrm{Re}\,}
+\newcommand\op{\mathrm{op}}
+\newcommand\hs{\mathfrak I_2}
+\newcommand\tc{\mathfrak I_1}
+\newcommand{\qtq}[1]{\quad\text{#1}\quad}
+\newcommand\Schw{\mathcal{S}}
+\newcommand\eps{\varepsilon}
+%\newcommand{\vk}{\varkappa}
+%\newcommand{\bR}{\textbf R}
+%\newcommand{\sbrack}[1]{^{[#1]}}
+\newcommand{\bigO}{\mathcal O}  
+%\newcommand{\h}{\textup{\textsf{H}}}
+%\newcommand{\hbo}{H_{\text{\textup{BO}}}}
+%\newcommand{\hk}{H_\kappa}
+%\newcommand{\BA}{B^s_{\negmedspace A}} %other choices: \! (a.k.a. \negthinspace) and \negthickspace
+%\newcommand{\tint}{{{\textstyle\int} q}}
+%\newcommand{\btint}{\bigl[\tint\bigr]}
+
+%\newcommand{\sess}{\sigma_{\mkern-1mu\text{\upshape ess}}}
+
+\let\Re=\undefined\DeclareMathOperator{\Re}{Re}
+\let\Im=\undefined\DeclareMathOperator{\Im}{Im}
+%\DeclareMathOperator{\Id}{Id}
+%\DeclareMathOperator{\cosec}{cosec}
+%\DeclareMathOperator{\sech}{sech}
+%\DeclareMathOperator{\csch}{cosech}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\sgn}{sgn}
+%\newcommand{\CofP}{\textsl{CofP}}
+%\newcommand{\CofE}{\textsl{CofE}}
+%\newcommand{\CofB}{\textsl{Cof$\beta$}}
+%\newcommand{\VofP}{\textsl{VofP}}
+
+
+\newcommand{\mcPbk}{\mc P^\beta_\kappa}
+\newcommand{\olN}{{\,\ol{\! N}}}
+\newcommand{\olM}{{\,\ol{\! M}}}
+
+
+% Matthew's Macros
+\renewcommand{\(}{\left(}
+\renewcommand{\)}{\right)}
+
+\allowdisplaybreaks
+
+\begin{document}
+
+\title{\bf Energy Calculations}
+
+\author[M.~Kowalski]{Matthew Kowalski}
+\address{Department of Mathematics, University of California, Los Angeles, CA 90095, USA}
+\email{mattkowalski@math.ucla.edu}
+\author[J.~Hogan]{James Hogan}
+\address{Department of Mathematics, University of California, Los Angeles, CA 90095, USA}
+\email{jameshogan@math.ucla.edu}
+
+\maketitle
+
+\begin{theorem}[Energy of a Soliton]\label{energy of a soliton}
+    Consider an $N$-soliton of the form
+    \begin{equation*}
+        u(t,x) = \frac{P(t,x)}{Q(t,x)}
+    \end{equation*}
+    where $Q(t)$ is polynomial in $x$ of degree $N$ and $P(t)$ is polynomial in $x$ of degree at most $N - 1$. Then
+    \begin{equation*}
+        E(u) = \frac{1}{2}\left\| \frac{P_x}{Q}\right\|_{L^2_x}^2
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    We recall that by the definition of a $N$-soliton,
+    \begin{equation*}
+        |P|^2 = i(Q_x \overline{Q} - \overline{Q_x}Q).
+    \end{equation*}
+    Then by definition of the energy,
+    \begin{align*}
+        E(u) & = \frac{1}{2} \int \left| u_x - i \Pi_+(|u|^2)u\right|^2 \\
+        %& = \frac{1}{2} \int \left| \frac{QP_x - PQ_x}{Q^2} - i \Pi_+\(\frac{i(Q_x \overline{Q} - \overline{Q_x}Q)}{|Q|^2}\)\frac{P}{Q}\right|^2 \\
+        & = \frac{1}{2} \int \left| \frac{QP_x - PQ_x}{Q^2} + \Pi_+\(\frac{Q_x}{Q} - \frac{\overline{Q}_x}{\overline{Q}}\)\frac{P}{Q}\right|^2
+    \end{align*}
+    Since $Q$ (resp. $\overline{Q}$) has $N$ zeros in the lower (resp. upper) half plane, the definition of $\Pi_+$ implies that
+    \begin{align*}
+        E(u) & = \frac{1}{2} \int \left| \frac{QP_x - PQ_x}{Q^2} + \frac{Q_xP}{Q^2}\right|^2 \\
+        & = \frac{1}{2} \left\|\frac{P_x}{Q}\right\|_{L_x^2}^2 \\
+    \end{align*}
+    as desired.
+\end{proof}
+
+\begin{theorem}[Energy of Traveling Wave]
+    Consider a traveling solitary wave
+    \begin{equation*}
+        u(t,x) = e^{i \omega t} \mathcal{R}_{v,w}(x - vt) = e^{i\omega t}e^{\frac{i}{2} v(x-vt)} e^{i\theta} \frac{\sqrt{2\lambda}}{\lambda x - \lambda vt + y + i}
+    \end{equation*}
+    for $\omega,\theta,v,y \in \R$ and $\lambda > 0$. Then
+    \begin{equation*}
+        E(u) = \frac{\pi|v|^2}{4}.
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    Define
+    \begin{equation*}
+        \tilde{u}(t,x) = e^{i\omega t}e^{\frac{-i}{2}v^2t} e^{i\theta} \frac{\sqrt{2\lambda}}{\lambda x - \lambda vt + y + i}
+    \end{equation*}
+    so that $u(t,x) = e^{\frac{i}{2} v x} \tilde{u}(t,x)$. Note that for fixed $t$, $\tilde{u}(t),u(t)$ have the profiles of $1$-solitons. In particular, $\tilde{u}_x - i \Pi_+(|\tilde{u}|^2)\tilde{u} = 0$ and $\|u\|_2^2 = 2\pi$. This implies
+    \begin{align*}
+        E(u) & = \frac{1}{2} \int \left|\frac{i}{2} v u + e^{\frac{i}{2} vx} \tilde{u}_x - \Pi_+ \(|\tilde{u}|^2\)e^{\frac{i}{2} vx} \tilde{u} \right|^2 \\
+        & = \frac{|v|^2}{8} \int \left|u \right|^2 \\
+        & = \frac{\pi |v|^2}{4}
+    \end{align*}
+    as desired.
+\end{proof}
+
+\begin{theorem}[2-Soliton Energy]
+    Consider a $2$-soliton $u(t,x)$ of the general form
+    \begin{equation*}
+        u(t,x) = \frac{e^{i\varphi} \sqrt{2\rho}(\gamma_1 + 2 \lambda t + i \lambda^{-1} - x)}{x^2 - (\gamma_0 - i \rho + \gamma_1 + 2 \lambda t)x + (\gamma_0 - i \rho)(\gamma_1 + 2 \lambda t) - \lambda^{-2}}
+    \end{equation*}
+    for $\varphi,\gamma_0,\gamma_1 \in \R$, $\rho > 0$, and $\lambda \in \R\setminus\{0\}$. Then
+    \begin{equation*}
+        E(u) = \pi \lambda^2.
+    \end{equation*}
+\end{theorem}
+\begin{proof}
+    Let $z_\pm(t)$ denote the zeros of the denominator of $u(t,x)$. Recall that asymptotically,
+    \begin{equation*}
+        z_+(t) \to \gamma_0 - i \rho, \text{ and } z_-(t) \to 2\lambda t + i\frac{-\rho}{4\lambda^4 t^2} + O(1).
+    \end{equation*}
+    Then by direct calculation and theorem \ref{energy of a soliton},
+    \begin{align*}
+        E(u) = \frac{1}{2} \left\|\frac{-e^{i\varphi} \sqrt{2\rho}}{(x-z_+)(x-z_-)} \right\|_{L_x^2}^2 =  \rho \left\|\frac{1}{(x-z_+)(x-z_-)} \right\|_{L_x^2}^2
+    \end{align*}
+    A standard contour shift then yields
+    \begin{align*}
+        E(u) & = \rho \int\frac{1}{(x-z_+)(x-z_-)(x-\overline{z_+})(x-\overline{z_-})} \\
+        & = 2\pi i \rho\(\frac{1}{(\overline{z_+}-z_+)(\overline{z_+}-z_-)(\overline{z_+}-\overline{z_-})} + \frac{1}{(\overline{z_-}-z_+)(\overline{z_-}-z_-)(\overline{z_-}-\overline{z_+})}\)
+    \end{align*}
+    Since $E(u)$ is conserved, we may work asymptotically to find
+    \begin{align*}
+        E(u) & = \lim_{t \to \infty} 2\pi i \rho\(\frac{1}{(2i\rho)(2\lambda t + O(1))(2\lambda t + O(1))} + \frac{1}{(2\lambda t + O(1))(\frac{2i\rho}{4\lambda^4t^2} + O(1))(2\lambda t + O(1))}\) \\
+        & = \pi \lambda^2
+    \end{align*}
+    as desired.
+\end{proof}
+
+\end{document}
