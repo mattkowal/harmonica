@@ -1,6 +1,6 @@
 nohup.out
 .ipynb_checkpoints
-.log
-.out
-.aux
+*.log
+*.out
+*.aux
 
