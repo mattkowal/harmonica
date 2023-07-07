@@ -91,8 +91,7 @@ def animate(f, t, x):
         line.set_ydata(f[frame])
         return line,
     animation = FuncAnimation(fig, update, frames=len(t), interval=50, blit=True)
-
-    plt.show()
+#    plt.show()
     return animation
 
 """*****************************************************************************
