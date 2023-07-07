@@ -98,11 +98,16 @@ def animate(f, t, x):
 """*****************************************************************************
 Conservation Laws
 *****************************************************************************"""
-def mass(v, dx):
-    return np.sum(np.abs(v)**2) * dx
+def mass(u, dx):
+    return np.sum(np.abs(u)**2) * dx
 
-def energy(v, dx, xi):
-    integrand = np.gradient(v) / dx - 1j * pi_plus(np.abs(v)**2, xi) * v
+def H_s(u,s,dx,xi):
+    u_hat = np.fft.fft(u)
+    japanese = np.power(np.sqrt(1 + np.abs(xi)**2),s)
+    return dx*np.sum(np.abs(japanese*u_hat)**2)
+
+def energy(u, dx, xi):
+    integrand = np.gradient(u) / dx - 1j * pi_plus(np.abs(u)**2, xi) * u
     return 0.5 * np.sum(np.abs(integrand)**2) * dx
 
 """*****************************************************************************
