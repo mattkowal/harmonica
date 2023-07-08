@@ -61,7 +61,7 @@ def split_step(v, dt, xi):
     v_new = linear_propagator(v_new, dt/2, xi)
     return v_new
 
-def evolve(u_0, dx, T = 1.0, dt = 0.01, animation_steps = 1, ungauge = True):
+def evolve(u_0, dx, T=1.0, dt=0.01, animation_steps=1, ungauge=True):
     v_0 = gauge_transform(u_0, dx)
     v_tmp = np.copy(v_0)
     N_x = len(v_0)
@@ -112,7 +112,7 @@ def energy(u, dx, xi):
 """*****************************************************************************
 Initial Data
 *****************************************************************************"""
-def one_soliton(t, x, lamb = 1, phi = 0, y = 0):
+def one_soliton(t, x, lamb=1, phi=0, y=0):
     return np.exp(1j * phi) * np.sqrt(2 * lamb) / (lamb*x + y + 1j)
 
 def two_soliton(t, x, gamma_1 = 0, gamma_2 = 0, rho = 1, lamb = 1, phi = 0):
@@ -120,3 +120,12 @@ def two_soliton(t, x, gamma_1 = 0, gamma_2 = 0, rho = 1, lamb = 1, phi = 0):
             * (gamma_2 + 2 * lamb * t + (1j / lamb) - x)
             / (x**2  - (gamma_1 - 1j*rho + gamma_2 + 2 * lamb * t) * x
                + (gamma_1 - 1j * rho) * (gamma_2 + 2 * lamb * t) - lamb**(-2)))
+
+def bump(x, w=10) : # bump function supported on [-w,w]
+    temp = np.empty(len(x))
+    for i in range(len(x)):
+        if np.abs(x[i]) < w:
+            temp[i] = np.exp(1-w**2/(w**2-x[i]**2))
+        else:
+            temp[i] = 0
+    return temp # end of bump
