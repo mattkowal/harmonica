@@ -199,7 +199,7 @@ def will_this_kill_my_computer(u_0, N_t_anim, memory_tolerance=0.95):
     print("Evolving this will use "+str(usage)+"GB which is "+str(total_usage)
           +"% of total available RAM and "+str(current_usage)
           +"% of currently available RAM.")
-    if usage > memory_tolerance:
+    if total_usage > 100*memory_tolerance:
         raise MemoryError("Generating this animation will use "
                           +str(total_usage)+"% of total available memory."
                           +" I suggest a smaller animation or a larger computer.")
