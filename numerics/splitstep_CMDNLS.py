@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from tqdm.notebook import tqdm # used for visualizing progress of simulation
 from matplotlib.animation import FuncAnimation # used to animate the result
 from IPython.display import HTML # used to display the animation
+from IPython.display import Markdown as md # used to print functions
 
 """*****************************************************************************
 Basic Function Definitions
@@ -55,28 +56,42 @@ def nonlinear_propagator(v, dt, xi):
     return v_new
 
 def split_step(v, dt, xi, order=2):
-    # simulates timestep dt with split-step method
+    # simulates timestep dt with split-step method of a specified order
     if order == 1 :
-        v_new = linear_propagator(v, dt, xi)
+        v_new = linear_propagator(v,        dt, xi)
         v_new = nonlinear_propagator(v_new, dt, xi)
         return v_new
     elif order == 2 :
-        v_new = linear_propagator(v, dt/2, xi)
-        v_new = nonlinear_propagator(v_new, dt, xi)
-        v_new = linear_propagator(v_new, dt/2, xi)
+        v_new = linear_propagator(v,        dt/2, xi)
+        v_new = nonlinear_propagator(v_new, dt,   xi)
+        v_new = linear_propagator(v_new,    dt/2, xi)
         return v_new
-    if order == 4 :
+    elif order == 4 :
         omega = (2 + np.power(2,1/3) + np.power(2,-1/3))/3
-        v_new = linear_propagator(v, omega*dt/2, xi)
-        v_new = nonlinear_propagator(v_new, omega*dt, xi)
-        v_new = linear_propagator(v_new, (1-omega)*dt/2, xi)
-        v_new = nonlinear_propagator(v_new, (1-2*omega)*dt, xi)
-        v_new = linear_propagator(v_new, (1-omega)*dt/2, xi)
-        v_new = nonlinear_propagator(v_new, omega*dt, xi)
-        v_new = linear_propagator(v_new, omega*dt/2, xi)
+        v_new = linear_propagator(v,              omega*dt/2, xi)
+        v_new = nonlinear_propagator(v_new,       omega*dt,   xi)
+        v_new = linear_propagator(v_new,      (1-omega)*dt/2, xi)
+        v_new = nonlinear_propagator(v_new, (1-2*omega)*dt,   xi)
+        v_new = linear_propagator(v_new,      (1-omega)*dt/2, xi)
+        v_new = nonlinear_propagator(v_new,       omega*dt,   xi)
+        v_new = linear_propagator(v_new,          omega*dt/2, xi)
+        return v_new
+    elif order == 4.5 : # this is order 4, but slightly better
+        omega = (4 + np.power(2,-2/3) + np.power(2,2/3))/15
+        v_new = linear_propagator(v,              omega*dt/2, xi)
+        v_new = nonlinear_propagator(v_new,       omega*dt,   xi)
+        v_new = linear_propagator(v_new,          omega*dt,   xi)
+        v_new = nonlinear_propagator(v_new,       omega*dt,   xi)
+        v_new = linear_propagator(v_new,    (1-3*omega)*dt/2, xi)
+        v_new = nonlinear_propagator(v_new, (1-4*omega)*dt,   xi)
+        v_new = linear_propagator(v_new,    (1-3*omega)*dt/2, xi)
+        v_new = nonlinear_propagator(v_new,       omega*dt,   xi)
+        v_new = linear_propagator(v_new,          omega*dt,   xi)
+        v_new = nonlinear_propagator(v_new,       omega*dt,   xi)
+        v_new = linear_propagator(v_new,          omega*dt/2, xi)
         return v_new
     else :
-        raise ValueError("Invalid order given. Accepted orders are 1,2,4.")
+        raise ValueError("Invalid order given. Accepted orders are 1,2,4,4.5.")
 
 def evolve(u_0, dx, T=1.0, dt=0.01, animation_steps=1, order=2, ungauge=True):
     v_0 = gauge_transform(u_0, dx)
@@ -108,7 +123,7 @@ def animate(f, t, x):
         line.set_ydata(f[frame])
         return line,
     animation = FuncAnimation(fig, update, frames=len(t), interval=50, blit=True)
-#    plt.show()
+    # plt.show()
     return animation
 
 """*****************************************************************************
@@ -145,4 +160,23 @@ def bump(x, w=10) : # bump function supported on [-w,w]
             temp[i] = np.exp(1-w**2/(w**2-x[i]**2))
         else:
             temp[i] = 0
-    return temp # end of bump
+    return temp
+
+"""*****************************************************************************
+Printing this Code
+*****************************************************************************"""
+def print_code(func = "") :
+    f = open("splitstep_CMDNLS.py", "r")
+    s = f.read()
+    if func :
+        s = s[s.find("def "+func):]
+        if len(s) == 1 :
+            raise ValueError("Invalid function : "+func+" is not present in code")
+        i = 1
+        while s[i] != '\n' or s[i:i+2] in ['\n\n', '\n#', '\n '] :
+            i += 1
+        display(md("The "+func+" function is defined in ```splitstep_CMDNLS.py```"+
+                   " as \n```python\n"+s[:i]
+                   +"\n```"))
+    else :
+        display(md("```splitstep_CMDNLS.py``` is \n```python\n"+s+"\n```"))
