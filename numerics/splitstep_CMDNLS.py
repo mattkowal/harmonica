@@ -12,6 +12,10 @@ from tqdm.notebook import tqdm # used for visualizing progress of simulation
 from matplotlib.animation import FuncAnimation # used to animate the result
 from IPython.display import HTML # used to display the animation
 from IPython.display import Markdown as md # used to print functions
+import psutil # used to test if you have sufficient RAM
+from sys import getsizeof
+
+total_free_memory = psutil.virtual_memory().free
 
 """*****************************************************************************
 Basic Function Definitions
@@ -93,13 +97,15 @@ def split_step(v, dt, xi, order=2):
     else :
         raise ValueError("Invalid order given. Accepted orders are 1,2,4,4.5.")
 
-def evolve(u_0, dx, T=1.0, dt=0.01, animation_steps=1, order=2, ungauge=True):
+def evolve(u_0, dx, T=1.0, dt=0.01, animation_steps=1, order=2, ungauge=True,
+           memory_tolerance = 0.95):
     v_0 = gauge_transform(u_0, dx)
     v_tmp = np.copy(v_0)
     N_x = len(v_0)
     xi = np.fft.fftfreq(N_x) * 2 * np.pi / dx
     N_t = int(T / dt)
     N_t_anim = int(N_t/animation_steps)
+    will_this_kill_my_computer(u_0, N_t_anim, memory_tolerance)
     v_anim = np.empty(shape=(N_t_anim, N_x), dtype=complex)
     t_anim = np.arange(0, T, dt)[::animation_steps]
     print("Evolving the gauge transformed data : ")
@@ -180,3 +186,20 @@ def print_code(func = "") :
                    +"\n```"))
     else :
         display(md("```splitstep_CMDNLS.py``` is \n```python\n"+s+"\n```"))
+
+"""*****************************************************************************
+Diagnostics
+*****************************************************************************"""
+def will_this_kill_my_computer(u_0, N_t_anim, memory_tolerance=0.95):
+    free_memory = psutil.virtual_memory().free
+    size = getsizeof(u_0)
+    usage = np.trunc(N_t_anim*size*(1e-7))/100
+    total_usage = np.trunc(10000*N_t_anim*size/total_free_memory)/100
+    current_usage = np.trunc(10000*N_t_anim*size/free_memory)/100
+    print("Evolving this will use "+str(usage)+"GB which is "+str(total_usage)
+          +"% of total available RAM and "+str(current_usage)
+          +"% of currently available RAM.")
+    if usage > memory_tolerance:
+        raise MemoryError("Generating this animation will use "
+                          +str(total_usage)+"% of total available memory."
+                          +" I suggest a smaller animation or a larger computer.")
