@@ -3,6 +3,6 @@
 	- show soliton resolution in L2 for this case
  - Understand action of Galilei, scaling on H_kappa
  - Compute energy of travelling solitary waves R_vw (these really should be called the solitons)
- - Are R_vw minimizers of E s.t. P = const (P = <|D|q, q> - 1/2 ||q||_4^4)
+ - Are R_vw minimizers of E s.t. P = const (P = <Dq, q> - 1/2 ||q||_4^4)
  - Do numerics! (use split-step method for handling the nonlinearities)
  - look at u(x+i) and see how it evolves

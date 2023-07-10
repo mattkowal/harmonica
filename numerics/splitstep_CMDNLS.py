@@ -54,14 +54,31 @@ def nonlinear_propagator(v, dt, xi):
     v_new = v * np.exp(1j*dt * (abs_deriv(np.abs(v)**2,xi) - 0.25*np.abs(v)**4))
     return v_new
 
-def split_step(v, dt, xi):
+def split_step(v, dt, xi, order=2):
     # simulates timestep dt with split-step method
-    v_new = linear_propagator(v, dt/2, xi)
-    v_new = nonlinear_propagator(v_new, dt, xi)
-    v_new = linear_propagator(v_new, dt/2, xi)
-    return v_new
+    if order == 1 :
+        v_new = linear_propagator(v, dt, xi)
+        v_new = nonlinear_propagator(v_new, dt, xi)
+        return v_new
+    elif order == 2 :
+        v_new = linear_propagator(v, dt/2, xi)
+        v_new = nonlinear_propagator(v_new, dt, xi)
+        v_new = linear_propagator(v_new, dt/2, xi)
+        return v_new
+    if order == 4 :
+        omega = (2 + np.power(2,1/3) + np.power(2,-1/3))/3
+        v_new = linear_propagator(v, omega*dt/2, xi)
+        v_new = nonlinear_propagator(v_new, omega*dt, xi)
+        v_new = linear_propagator(v_new, (1-omega)*dt/2, xi)
+        v_new = nonlinear_propagator(v_new, (1-2*omega)*dt, xi)
+        v_new = linear_propagator(v_new, (1-omega)*dt/2, xi)
+        v_new = nonlinear_propagator(v_new, omega*dt, xi)
+        v_new = linear_propagator(v_new, omega*dt/2, xi)
+        return v_new
+    else :
+        raise ValueError("Invalid order given. Accepted orders are 1,2,4.")
 
-def evolve(u_0, dx, T=1.0, dt=0.01, animation_steps=1, ungauge=True):
+def evolve(u_0, dx, T=1.0, dt=0.01, animation_steps=1, order=2, ungauge=True):
     v_0 = gauge_transform(u_0, dx)
     v_tmp = np.copy(v_0)
     N_x = len(v_0)
@@ -74,7 +91,7 @@ def evolve(u_0, dx, T=1.0, dt=0.01, animation_steps=1, ungauge=True):
     for i in tqdm(range(N_t)):
         if i % animation_steps == 0:
             v_anim[int(i / animation_steps)] = v_tmp
-        v_tmp = split_step(v_tmp, dt, xi)
+        v_tmp = split_step(v_tmp, dt, xi, order)
     if ungauge:
         print("Undoing the gauge transform : ")
         for i in tqdm(range(len(v_anim))):
