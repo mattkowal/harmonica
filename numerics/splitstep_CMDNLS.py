@@ -140,7 +140,7 @@ def mass(u, dx):
 
 def H_s(u,s,dx,xi):
     u_hat = np.fft.fft(u)
-    japanese = np.power(np.sqrt(1 + np.abs(xi)**2),s)
+    japanese = np.power(np.sqrt(1 + np.abs(xi)**2),s/2)
     return dx*np.sum(np.abs(japanese*u_hat)**2)
 
 def energy(u, dx, xi):
