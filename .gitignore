@@ -3,4 +3,5 @@ nohup.out
 *.log
 *.out
 *.aux
-
+local-data/
+temp/
